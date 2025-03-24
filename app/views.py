@@ -388,21 +388,32 @@ def extract_text_from_docx(docx_path):
     except Exception as e:
         return None  # Return None if extraction fails
 
-def extract_text_from_doc(doc_path):
-    """Extract text from a DOC file using pywin32 (Microsoft Word)."""
+from docx import Document
+import os
+
+def extract_text_from_docx(doc_path):
+    """Extract text from a DOCX file using python-docx."""
     try:
-        pythoncom.CoInitialize()  # Initialize COM (Required for Windows)
-        word = win32com.client.Dispatch("Word.Application")
-        word.Visible = False  # Run MS Word in the background
+        if not os.path.exists(doc_path):
+            raise FileNotFoundError(f"File not found: {doc_path}")
 
-        doc = word.Documents.Open(os.path.abspath(doc_path))  # Open the document
-        text = doc.Content.Text.strip()  # Extract text
-        doc.Close(False)  # Close the document (without saving)
-        word.Quit()  # Quit Word application
+        doc = Document(doc_path)  # Open the .docx file
+        text = "\n".join([para.text for para in doc.paragraphs])  # Extract text
 
-        return text
+        return text.strip()  # Return extracted text
     except Exception as e:
-        return None  # Return None if extraction fails
+        print(f"Error: {e}")
+        return None
+
+# Example Usage
+file_path = "example.docx"  # Change to your file path
+extracted_text = extract_text_from_docx(file_path)
+
+if extracted_text:
+    print("Extracted Text:\n", extracted_text)
+else:
+    print("Failed to extract text.")
+
 
 def text_to_speech(request, id, req):
     # Retrieve the file path from the model

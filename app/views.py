@@ -346,8 +346,12 @@ from datetime import datetime
 import uuid
 import chardet  # Auto-detect file encoding
 import fitz  # PyMuPDF for PDF text extraction
-from docx import Document  # Extract text from DOCX files
-import pythoncom  # Required for pywin32 on Windows
+from docx import Document  
+import sys
+
+if sys.platform == "win32":
+    import pythoncom # Extract text from DOCX files
+ # Required for pywin32 on Windows
 import win32com.client  # Extract text from DOC files (Microsoft Word)
 from .models import UploadFileModel
 

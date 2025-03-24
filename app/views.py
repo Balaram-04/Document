@@ -352,7 +352,7 @@ import sys
 if sys.platform == "win32":
     import pythoncom # Extract text from DOCX files
  # Required for pywin32 on Windows
-import win32com.client  # Extract text from DOC files (Microsoft Word)
+#import win32com.client  # Extract text from DOC files (Microsoft Word)
 from .models import UploadFileModel
 
 # Supported file types

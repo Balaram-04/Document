@@ -270,7 +270,6 @@ tensorboard==2.18.0
 tensorboard-data-server==0.7.2
 tensorboard-plugin-wit==1.8.1
 tensorflow==2.18.0
-tensorflow-estimator==2.15.0
 termcolor==1.1.0
 terminado==0.18.1
 text-unidecode==1.3

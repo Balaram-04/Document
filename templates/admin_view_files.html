@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin File Verification</title>
+    <style>
+        
+        .container {
+            width: 100%;
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #16c6d3;
+            color: white;
+        }
+
+        .duplicate {
+            background-color: #ffcccc;
+        }
+
+        .btn {
+            margin: 2px;
+        }
+
+        .header {
+            background-color: #333;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="dropdown">
+        <button class="dropbtn">{{ email }}</button>
+        <div class="dropdown-content">
+            <a href="{% url 'admin_logout' %}">Logout</a>
+        </div>
+    </div>
+</header>
+
+
+<div class="container-box">
+    {% if messages %}
+        {% for message in messages %}
+            <center><p class="alert alert-success">{{ message }}</p></center>
+        {% endfor %}
+    {% endif %}
+
+    <h1>Admin File Verification</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Email</th>
+                <th>File Name</th>
+                <th>Uploaded At</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if data %}
+                {% for i in data %}
+                <tr {% if i.is_duplicate %} class="duplicate" {% endif %}>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ i.user.username }}</td>
+                    <td>{{ i.user.email }}</td>
+                    <td>{{ i.file }}</td>
+                    <td>{{ i.uploaded_at }}</td>
+                    <td>
+                        {% if i.status == "Pending" %}
+                            <span style="color: orange; font-weight: bold;">Pending</span>
+                        {% elif i.status == "Accepted" %}
+                            <span style="color: green; font-weight: bold;">Accepted</span>
+                        {% elif i.status == "Rejected" %}
+                            <span style="color: red; font-weight: bold;">Rejected</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'accept_file' i.id %}" class="btn btn-success">Accept</a>
+                        <a href="{% url 'reject_file' i.id %}" class="btn btn-danger">Reject</a>
+                        <a href="{% url 'pending_file' i.id %}" class="btn btn-warning">Pending</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="7">No files found.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <div >
+        <a href="?page=1">First</a>
+        <a href="?page={% if data.number > 1 %}{{ data.previous_page_number }}{% else %}1{% endif %}">Previous</a>
+        {% for num in data.paginator.page_range %}
+            {% if data.number == num %}
+                <a href="?page={{ num }}" class="active">{{ num }}</a>
+            {% else %}
+                <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        <a href="?page={% if data.number < data.paginator.num_pages %}{{ data.next_page_number }}{% else %}{{ data.paginator.num_pages }}{% endif %}">Next</a>
+        <a href="?page={{ data.paginator.num_pages }}">Last</a>
+    </div>
+</div>

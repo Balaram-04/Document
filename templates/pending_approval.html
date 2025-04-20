@@ -1,0 +1,32 @@
+{% extends 'admin_base' %}
+{% block content %}
+<h2>Pending Approvals</h2>
+
+<h3>Pending Admins</h3>
+<ul>
+    {% for admin in pending_admins %}
+    <li>{{ admin.email }} - Not Verified</li>
+    {% endfor %}
+</ul>
+
+<h3>Duplicate Files</h3>
+<table border="1">
+    <tr>
+        <th>File Name</th>
+        <th>Similarity (%)</th>
+        <th>Action</th>
+    </tr>
+    {% for file in duplicate_files %}
+    <tr>
+        <td>{{ file.filename }}</td>
+        <td>{{ file.similarity|floatformat:2 }}%</td>
+        <td>
+            <a href="{% url 'admin_approve_document' file.id %}">Approve</a> |
+            <a href="{% url 'admin_reject_document' file.id %}">Reject</a> |
+            <a href="{% url 'admin_set_pending' file.id %}">Set Pending</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

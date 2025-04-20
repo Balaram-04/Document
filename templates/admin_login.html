@@ -1,0 +1,74 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="form-container">
+        <h2 class="text-center">Admin Login</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <p class="alert alert-danger text-center">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" action="{% url 'admina_login' %}" class="login-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="admin_id">Admin ID</label>
+                <input type="text" id="admin_id" name="admin_id" class="form-control" placeholder="Enter Admin ID" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+
+        <br>
+
+        <!-- OTP Verification Section -->
+        
+    </div>
+</div>
+
+<style>
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .form-container {
+        width: 400px;
+        padding: 20px;
+        background: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+    }
+</style>
+{% endblock %}

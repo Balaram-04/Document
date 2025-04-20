@@ -1,0 +1,136 @@
+
+{% block extra_css %}
+<style>
+    /* General Styling */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    /* Form Container */
+    .form-container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    /* Form Title */
+    h2 {
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    /* Alerts */
+    .alert {
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .alert-danger {
+        background-color: #ffdddd;
+        color: #d9534f;
+        border-left: 4px solid #d9534f;
+    }
+
+    /* Form Group */
+    .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+
+    label {
+        font-size: 14px;
+        font-weight: bold;
+        color: #555;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+
+    input:focus {
+        border-color: #007bff;
+    }
+
+    /* Button Styling */
+    .btn {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 16px;
+        width: 100%;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    .resend-btn {
+        background-color: #28a745;
+    }
+
+    .resend-btn:hover {
+        background-color: #218838;
+    }
+
+    /* Fade-in Animation */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Verify USER OTP</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <p class="alert alert-danger">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Enter OTP</label>
+            <input type="text" name="otp" placeholder="Enter 6-digit OTP" required>
+        </div>
+        <button type="submit" class="btn">Verify</button>
+    </form>
+    <form method="post" action="{% url 'resend_user_otp' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn resend-btn">Resend OTP</button>
+    </form>
+</div>
+{% endblock %}

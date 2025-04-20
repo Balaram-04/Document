@@ -1,0 +1,101 @@
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(to right, #eef2f3, #d3cce3);
+        font-family: 'Arial', sans-serif;
+    }
+
+    .insight-container {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        margin: auto;
+        margin-top: 40px;
+    }
+
+    h2 {
+        color: #4a47a3;
+        text-align: center;
+    }
+
+    .card {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    h4 {
+        color: #4a47a3;
+    }
+
+    p, pre {
+        color: #333;
+        font-size: 15px;
+    }
+
+    pre {
+        background: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+    }
+
+    .btn {
+        margin-top: 10px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+
+    .btn-primary {
+        background: #4a47a3;
+        color: white;
+    }
+
+    .btn:hover {
+        opacity: 0.8;
+    }
+
+    .info-msg {
+        color: green;
+        text-align: center;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+</style>
+
+<div class="insight-container">
+    <h2>🧠 AI-Generated Document Insights</h2>
+    <hr>
+
+    {% if info_path %}
+        <div class="info-msg">{{ info_path }}</div>
+    {% endif %}
+
+    {% if insights %}
+        <div class="card mb-3 p-3 border rounded">
+            <h4>📄 {{ file_name }}</h4>
+            <p><strong>📂 Category:</strong> {{ insights.category|default:"N/A" }}</p>
+            <p><strong>📝 Summary:</strong></p>
+            <pre>{{ insights.summary|default:"No summary available." }}</pre>
+            <p><strong>🔍 Keywords:</strong> {{ insights.keywords|join:", " }}</p>
+        </div>
+    {% else %}
+        <p style="color: red; text-align: center;">❌ No insights available for this document.</p>
+    {% endif %}
+
+    <div class="text-center">
+        <a href="{% url 'viewfiles' %}" class="btn btn-secondary">Back</a>
+        <a href="#" class="btn btn-primary">Download Insight</a>
+    </div>
+</div>
+{% endblock %}
